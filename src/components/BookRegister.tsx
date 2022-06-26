@@ -1,11 +1,28 @@
 import { useState } from 'react';
 import ManReading from '../assets/man-reading.svg';
 import { InputLayout } from './InputLayout';
+import api from '../services/api';
 
 export function BookRegister() {
   const [nomeLivro, setNomeLivro] = useState('')
   const [nomeAutor, setNomeAutor] = useState('')
   const [dataPublicacao, setDataPublicacao] = useState('')
+  const baseURL = "http://localhost:3001/"
+
+  const handleSubmitNewBook = () => {
+    api
+    .post(baseURL,{
+      "nome": `${nomeLivro}`,
+      "autor": `${nomeAutor}`,
+      "data": `${dataPublicacao}`,
+    })
+    .then(() => {
+      console.log("Cadastrado com sucesso")
+    })
+    .catch((err) => {
+      console.log("Algo deu errado" + err);
+    })
+  }
 
   return (
     <section className="w-1/2 h-full bg-brand rounded-3xl flex justify-center items-center p-[4.5rem]">
@@ -19,11 +36,13 @@ export function BookRegister() {
           </div>
           <img src={ManReading} alt="Man Reading Illustration" className='w-[55%] h-full '/>
         </div>
-        <form>
+        <form onSubmit={handleSubmitNewBook}>
           <InputLayout inputText="Nome" setProps={setNomeLivro}/>
           <InputLayout inputText="Autor" setProps={setNomeAutor}/>
           <InputLayout inputText="Data de publicação" setProps={setDataPublicacao} />
-          <button className='w-full h-[60px] bg-constrast mt-6 rounded-lg text-xl font-bold hover:bg-constrastDarker transition-colors duration-300'>
+          <button 
+          type='submit'
+          className='w-full h-[60px] bg-constrast mt-6 rounded-lg text-xl font-bold hover:bg-constrastDarker transition-colors duration-300'>
             Cadastrar
           </button>
         </form>
